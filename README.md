@@ -2,6 +2,8 @@
 
 This is a small repo created to show an example of a bug in Next.js (v14.1.0).
 
+_Deployement Link: https://nextjs-edge-params-bug.vercel.app/_
+
 _This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)._
 
 ## Bug
@@ -11,6 +13,12 @@ When dynamic routing is implemented in a project using the Edge runtime, it is s
 ## How to replicate
 
 1. Create a dynamic route: `/[slug]`
+
+1. Enable the edge runtime on the page:
+
+   ```JSX
+   export const runtime = "edge";
+   ```
 
 1. Add `params` and `searchParams` props to the default exported component:
 
@@ -38,11 +46,11 @@ When dynamic routing is implemented in a project using the Edge runtime, it is s
    )
    ```
 
-_Feel free to use any method you prefer here, `console.log()`, etc._
+   _Feel free to use any method you prefer here, `console.log()`, etc._
 
 1. Run/build the project and navigate to the appropriate page: `/anyRandomString`
 
-1. You'll see the both `searchParams` has all entries present in `params`
+1. You'll see that `searchParams` has all entries present in `params`
 
    ```JSON
    "searchParams": {
