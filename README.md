@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Edge Runtime Params Bug
 
-## Getting Started
+This is a small repo created to show an example of a bug in Next.js (v14.1.0).
 
-First, run the development server:
+_This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)._
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Bug
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+When dynamic routing is implemented in a project using the Edge runtime, it is supposed to send the params of the route to the page. Next.js does so via tha `params` prop ([Docs](https://nextjs.org/docs/pages/building-your-application/routing/dynamic-routes)). If you try to do so using the edge runtime, the value of `params` is also passed to the `searchParams` props of the page.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How to replicate
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Create a dynamic route: `/[slug]`
 
-## Learn More
+1. Add `params` and `searchParams` props to the default exported component:
 
-To learn more about Next.js, take a look at the following resources:
+   ```JSX
+   export default function Page({
+    params,
+    searchParams
+   }:{
+    params: {
+      slug: string
+    },
+    searchParams: {}
+   }) {
+     // Code
+   }
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Add a way to see the content of `searchParams` (and params too optionally)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+   ```JSX
+   return(
+     <pre>
+       {JSON.stringify(searchParams, null, "\t")}
+     </pre>
+   )
+   ```
 
-## Deploy on Vercel
+_Feel free to use any method you prefer here, `console.log()`, etc._
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Run/build the project and navigate to the appropriate page: `/anyRandomString`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. You'll see the both `searchParams` has all entries present in `params`
+
+   ```JSON
+   "searchParams": {
+     "slug": "someRandomString"
+   }
+   ```
+
+## Use my example
+
+_I am using NodeJS (v21.6.1), feel to try it on yarn, bun. I don't use them, so no guarantees_
+
+1. Install dependencies
+
+   ```bash
+   npm -i
+   ```
+
+1. Either build a production version and then run it or run a development server
+
+   ```bash
+   npm run build && npm run start
+   # or
+   npm run dev
+   ```
+
+1. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
