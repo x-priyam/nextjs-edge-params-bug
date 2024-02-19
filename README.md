@@ -2,7 +2,9 @@
 
 This is a small repo created to show an example of a bug in Next.js (v14.1.0).
 
-_Deployement Link: https://nextjs-edge-params-bug.vercel.app/_
+_Deployement: https://nextjs-edge-params-bug.vercel.app/_
+
+_Next.js Issue: https://github.com/vercel/next.js/issues/62243_
 
 _This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)._
 
